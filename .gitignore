@@ -1,0 +1,5 @@
+*
+!.*ignore
+!appsscript.json
+!main.js
+!README.md
