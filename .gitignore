@@ -2,4 +2,5 @@
 !.*ignore
 !appsscript.json
 !main.js
+!keyboards.js
 !README.md
