@@ -1,14 +1,49 @@
-var deployment_id = "AKfycbwH8qU6nv90J4JN7VGPO8yMCdkxona3S0jtRJTuapVRvduVrqC8wfqsPBKAlWwf6Or6"
-var server_url = "https://script.google.com/macros/s/" + deployment_id + "/exec"
-var version_text = "Checkpoint 1.7: move inline keyboards to another file"
+var version_text = "Checkpoint 1.9: move spreadsheet id, deployment id to another file"
+
+var top_level_inline_keyboard = {
+  inline_keyboard: [
+    [
+      {
+        text: 'Google',
+        callback_data: "clicked google",
+      }
+    ],
+    [
+      {
+        text: 'Yahoo',
+        callback_data: "clicked yahoo",
+      },
+      {
+        text: 'Bing',
+        callback_data: "clicked bing",
+      }
+    ]
+  ]
+};
+
+var second_level_inline_keyboard = {
+  inline_keyboard: [
+    [
+      {
+        text: "google1",
+        callback_data: "clicked google1",
+      },
+      {
+        text: "google2",
+        callback_data: "clicked google2",
+      }
+    ]
+  ]
+};
 
 // Steps to update webhook:
 //   1. Deploy project
 //   2. Copy web app url and paste here
 //   3. Save & run `setWebhook`
 function setWebhook() {
-  var result = tgmsgv3({ "url": server_url })
-  Logger.log(result)
+  Logger.log(server_url);
+  var result = tgmsgv3({ "url": server_url });
+  Logger.log(result);
 }
 
 // Helper method to set webhook.
@@ -23,8 +58,8 @@ function tgmsgv3(data) {
 }
 
 function get_sheet() {
-  var ss = SpreadsheetApp.openById("1rjePekaWarx5lojXcl8pYwWxKblrEYvhXj7Y6If_zSs");  // In nn Out Data
-  var sheet = ss.getSheetByName("Data");
+  var ss = SpreadsheetApp.openById(spreadsheet_id);  // In nn Out Data
+  var sheet = ss.getSheetByName(datasheet_name);
   return sheet;
 }
 
@@ -51,7 +86,7 @@ function identifier(update) {
         "method": "sendMessage",
         "chat_id": String(update.message.chat.id),
         "text": version_text,
-        "reply_markup": JSON.stringify(get_top_level_inline_keyboard()),
+        "reply_markup": JSON.stringify(top_level_inline_keyboard),
       }
     } else if (update.message.text == '/test1') {
       // placeholder
@@ -86,7 +121,7 @@ function identifier(update) {
         "chat_id": String(update.callback_query.from.id),
         "message_id": String(update.callback_query.message.message_id),
         "text": version_text,
-        "reply_markup": JSON.stringify(get_second_level_inline_keyboard()),
+        "reply_markup": JSON.stringify(second_level_inline_keyboard),
       }
     }
   }
@@ -98,7 +133,7 @@ function identifier(update) {
 // This script is published as a web app. 
 // doPost(e) will be triggered upon receiving a POST request.
 function doPost(e) {
-  // write_to_last_row(["received", e.postData.contents]);
+  write_to_last_row(["doPost"]);
 
   var tg_update = JSON.parse(e.postData.contents);
   var payload = identifier(tg_update);
