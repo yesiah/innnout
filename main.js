@@ -1,6 +1,6 @@
-var deployment_id = "AKfycby8vrNezOwESZUSzN62MCg3QQ6Zwi_dLboDs_FYaWN3Ta9Nx9MyOlS9gv-IKuP9toe4"
+var deployment_id = "AKfycbx6qnftWAcl-UirUEnKxwSudYfdqd3pxbX1cPiJ29J4TKhhIIr3tud_mDdLCOdEf3aS"
 var server_url = "https://script.google.com/macros/s/" + deployment_id + "/exec"
-var version_text = "Test 1.5.24: test update keyboard with another keyboard"
+var version_text = "Checkpoint 1.6: update inline keyboard"
 
 // Steps to update webhook:
 //   1. Deploy project
@@ -104,9 +104,9 @@ function identifier(update) {
       }
     }
   } else if (update?.callback_query) {
-    write_to_last_row(["callback"]);
+    // write_to_last_row(["callback"]);
     if (update.callback_query.data == "clicked google") {
-      write_to_last_row(["clicked google"]);
+      // write_to_last_row(["clicked google"]);
       var inline_keyboard2 = {
         inline_keyboard: [
           [
@@ -122,30 +122,30 @@ function identifier(update) {
         ]
       };
 
-      // var mensaje = {
-      //   "method": "editMessageText",
-      //   "chat_id": String(update.callback_query.from.id),
-      //   "message_id": String(update.callback_query.message.message_id),
-      //   "text": version_text,
-      //   "reply_markup": JSON.stringify(inline_keyboard2),
-      // }
       var mensaje = {
-        "method": "sendMessage",
-        "chat_id": String(update.callback_query.message.chat.id),
+        "method": "editMessageReplyMarkup",
+        "chat_id": String(update.callback_query.from.id),
+        "message_id": String(update.callback_query.message.message_id),
         "text": version_text,
         "reply_markup": JSON.stringify(inline_keyboard2),
       }
+      // var mensaje = {
+      //   "method": "sendMessage",
+      //   "chat_id": String(update.callback_query.message.chat.id),
+      //   "text": version_text,
+      //   "reply_markup": JSON.stringify(inline_keyboard2),
+      // }
     }
   }
 
-  write_to_last_row(["sent", mensaje]);
+  // write_to_last_row(["sent", mensaje]);
   return mensaje
 }
 
 // This script is published as a web app. 
 // doPost(e) will be triggered upon receiving a POST request.
 function doPost(e) {
-  write_to_last_row(["received", e.postData.contents]);
+  // write_to_last_row(["received", e.postData.contents]);
 
   var tg_update = JSON.parse(e.postData.contents);
   var payload = identifier(tg_update);
