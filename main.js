@@ -1,6 +1,6 @@
-var deployment_id = "AKfycbx6qnftWAcl-UirUEnKxwSudYfdqd3pxbX1cPiJ29J4TKhhIIr3tud_mDdLCOdEf3aS"
+var deployment_id = "AKfycbwH8qU6nv90J4JN7VGPO8yMCdkxona3S0jtRJTuapVRvduVrqC8wfqsPBKAlWwf6Or6"
 var server_url = "https://script.google.com/macros/s/" + deployment_id + "/exec"
-var version_text = "Checkpoint 1.6: update inline keyboard"
+var version_text = "Checkpoint 1.7: move inline keyboards to another file"
 
 // Steps to update webhook:
 //   1. Deploy project
@@ -47,38 +47,11 @@ function test(e) {
 function identifier(update) {
   if (update?.message?.text) {
     if (update.message.text == '/test') {
-      // Try make a keyboard
-      // var reply_keyboard = {
-      //   keyboard: [["DBS", "PChome"], ["iPass"]],
-      //   one_time_keyboard: true,  // hide the keyboard right after used
-      // };
-
-      var inline_keyboard = {
-        inline_keyboard: [
-          [
-            {
-              text: 'Google',
-              callback_data: "clicked google",
-            }
-          ],
-          [
-            {
-              text: 'Yahoo',
-              callback_data: "clicked yahoo",
-            },
-            {
-              text: 'Bing',
-              callback_data: "clicked bing",
-            }
-          ]
-        ]
-      };
-
       var mensaje = {
         "method": "sendMessage",
         "chat_id": String(update.message.chat.id),
         "text": version_text,
-        "reply_markup": JSON.stringify(inline_keyboard),
+        "reply_markup": JSON.stringify(get_top_level_inline_keyboard()),
       }
     } else if (update.message.text == '/test1') {
       // placeholder
@@ -107,34 +80,14 @@ function identifier(update) {
     // write_to_last_row(["callback"]);
     if (update.callback_query.data == "clicked google") {
       // write_to_last_row(["clicked google"]);
-      var inline_keyboard2 = {
-        inline_keyboard: [
-          [
-            {
-              text: "google1",
-              callback_data: "clicked google1",
-            },
-            {
-              text: "google2",
-              callback_data: "clicked google2",
-            }
-          ]
-        ]
-      };
 
       var mensaje = {
         "method": "editMessageReplyMarkup",
         "chat_id": String(update.callback_query.from.id),
         "message_id": String(update.callback_query.message.message_id),
         "text": version_text,
-        "reply_markup": JSON.stringify(inline_keyboard2),
+        "reply_markup": JSON.stringify(get_second_level_inline_keyboard()),
       }
-      // var mensaje = {
-      //   "method": "sendMessage",
-      //   "chat_id": String(update.callback_query.message.chat.id),
-      //   "text": version_text,
-      //   "reply_markup": JSON.stringify(inline_keyboard2),
-      // }
     }
   }
 
