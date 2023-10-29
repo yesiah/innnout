@@ -1,4 +1,4 @@
-var version_text = "Checkpoint 2.0: move inline keyboard to another file"
+var version_text = "V2.0.2: /new to show accounts"
 
 // Steps to update webhook:
 //   1. Deploy project
@@ -52,8 +52,13 @@ function identifier(update) {
         "text": version_text,
         "reply_markup": JSON.stringify(top_level_inline_keyboard),
       }
-    } else if (update.message.text == '/test1') {
-      // placeholder
+    } else if (update.message.text == '/new') {  // Add a new record
+      var mensaje = {
+        "method": "sendMessage",
+        "chat_id": String(update.message.chat.id),
+        "text": version_text,
+        "reply_markup": JSON.stringify(account_keyboard),
+      }
     } else if (update.message.sticker) {
       var mensaje = {
         "method": "sendSticker",
